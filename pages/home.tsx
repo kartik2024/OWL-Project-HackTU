@@ -7,9 +7,11 @@ import Image from "next/image";
 import { useRouter } from 'next/router';
 import { ethers } from 'ethers';
 import UserPreferencesModal, { UserPreferences } from '../components/UserPreferencesModal';
-import { getRecommendedCourses, Course } from '../data/recommendedCourses';
-import { courses } from '../data/courses';
-import { Course as CourseType } from '../types/courseTypes';
+// import { Course } from '../data/recommendedCourses';
+import { courses, Course } from '../data/courses';
+import { useMediaQuery } from 'react-responsive';
+import { AnimatePresence } from 'framer-motion';
+
 
 const OwlLogo = () => (
   <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: "15px" }}>
@@ -465,6 +467,10 @@ const getRecommendedCourses = (preferences: UserPreferences): Course[] => {
         price: 0.01,
         videoUrl: "",
         ipfsLink: "",
+        certificateTemplate: "",
+        signLanguage: "",
+        specialFeatures: [],
+        subtitles: false,
         videoCID: "",
         isPaid: true,
         duration: "8 hours",
@@ -479,6 +485,10 @@ const getRecommendedCourses = (preferences: UserPreferences): Course[] => {
         description: "Deep dive into cellular structures and molecular mechanisms.",
         price: 0.01,
         videoUrl: "",
+        certificateTemplate: "",
+        signLanguage: "",
+        specialFeatures: [],
+        subtitles: false,
         ipfsLink: "",
         videoCID: "",
         isPaid: true,
@@ -497,6 +507,10 @@ const getRecommendedCourses = (preferences: UserPreferences): Course[] => {
         price: 0.01,
         videoUrl: "",
         ipfsLink: "",
+        certificateTemplate: "",
+        signLanguage: "",
+        specialFeatures: [],
+        subtitles: false,
         videoCID: "",
         isPaid: true,
         duration: "12 hours",
@@ -512,6 +526,10 @@ const getRecommendedCourses = (preferences: UserPreferences): Course[] => {
         price: 0.01,
         videoUrl: "",
         ipfsLink: "",
+        certificateTemplate: "",
+        signLanguage: "",
+        specialFeatures: [],
+        subtitles: false,
         videoCID: "",
         isPaid: true,
         duration: "8 hours",
@@ -529,6 +547,10 @@ const getRecommendedCourses = (preferences: UserPreferences): Course[] => {
         price: 0.01,
         videoUrl: "",
         ipfsLink: "",
+        certificateTemplate: "",
+        signLanguage: "",
+        specialFeatures: [],
+        subtitles: false,
         videoCID: "",
         isPaid: true,
         duration: "6 hours",
@@ -545,6 +567,10 @@ const getRecommendedCourses = (preferences: UserPreferences): Course[] => {
         videoUrl: "",
         ipfsLink: "",
         videoCID: "",
+        certificateTemplate: "",
+        signLanguage: "",
+        specialFeatures: [],
+        subtitles: false,
         isPaid: true,
         duration: "8 hours",
         instructor: "Prof. Green Energy",
@@ -559,6 +585,10 @@ const getRecommendedCourses = (preferences: UserPreferences): Course[] => {
         title: "Blockchain Development",
         description: "Build decentralized applications and smart contracts.",
         price: 0.01,
+        certificateTemplate: "",
+        signLanguage: "",
+        specialFeatures: [],
+        subtitles: false,
         videoUrl: "",
         ipfsLink: "",
         videoCID: "",
@@ -578,6 +608,10 @@ const getRecommendedCourses = (preferences: UserPreferences): Course[] => {
         ipfsLink: "",
         videoCID: "",
         isPaid: true,
+        certificateTemplate: "",
+        signLanguage: "",
+        specialFeatures: [],
+        subtitles: false,
         duration: "8 hours",
         instructor: "Prof. DeFi Expert",
         category: "Technology",
@@ -592,6 +626,10 @@ const getRecommendedCourses = (preferences: UserPreferences): Course[] => {
         description: "Develop essential leadership skills and emotional intelligence.",
         price: 0.01,
         videoUrl: "",
+        certificateTemplate: "",
+        signLanguage: "",
+        specialFeatures: [],
+        subtitles: false,
         ipfsLink: "",
         videoCID: "",
         isPaid: true,
@@ -609,6 +647,10 @@ const getRecommendedCourses = (preferences: UserPreferences): Course[] => {
         videoUrl: "",
         ipfsLink: "",
         videoCID: "",
+        certificateTemplate: "",
+        signLanguage: "",
+        specialFeatures: [],
+        subtitles: false,
         isPaid: true,
         duration: "4 hours",
         instructor: "Prof. Time Master",
@@ -626,6 +668,56 @@ const getRecommendedCourses = (preferences: UserPreferences): Course[] => {
   return courseTemplates[mainInterest] || courses.slice(0, 2);
 };
 
+const HamburgerIcon = ({ isOpen, onClick }: { isOpen: boolean; onClick: () => void }) => (
+  <motion.button
+    onClick={onClick}
+    style={{
+      background: 'none',
+      border: 'none',
+      cursor: 'pointer',
+      padding: '10px',
+      zIndex: 1001,
+      position: 'relative',
+    }}
+  >
+    <motion.div
+      style={{
+        width: '24px',
+        height: '3px',
+        background: isOpen ? 'transparent' : '#E0E0E0',
+        position: 'relative',
+        transformOrigin: 'center',
+        transition: 'background 0.2s ease',
+      }}
+    >
+      <motion.div
+        style={{
+          width: '24px',
+          height: '3px',
+          background: '#E0E0E0',
+          position: 'absolute',
+          top: '-8px',
+          transformOrigin: 'center',
+        }}
+        animate={isOpen ? { rotate: 45, y: 8 } : { rotate: 0, y: 0 }}
+        transition={{ duration: 0.2 }}
+      />
+      <motion.div
+        style={{
+          width: '24px',
+          height: '3px',
+          background: '#E0E0E0',
+          position: 'absolute',
+          bottom: '-8px',
+          transformOrigin: 'center',
+        }}
+        animate={isOpen ? { rotate: -45, y: -8 } : { rotate: 0, y: 0 }}
+        transition={{ duration: 0.2 }}
+      />
+    </motion.div>
+  </motion.button>
+);
+
 export default function Home() {
   const router = useRouter();
   const [userName, setUserName] = useState<string | null>(null);
@@ -638,6 +730,8 @@ export default function Home() {
   const [showPreferencesModal, setShowPreferencesModal] = useState(false);
   const [recommendedCourses, setRecommendedCourses] = useState<Course[]>([]);
   const [userPreferences, setUserPreferences] = useState<UserPreferences | null>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const isMobile = useMediaQuery({ maxWidth: 768 });
 
   const pageStyle: React.CSSProperties = {
     background: "linear-gradient(145deg, #050505, #130A2A, #0A1229)",
@@ -734,8 +828,8 @@ export default function Home() {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        padding: "40px 60px",
-        height: "120px",
+        padding: isMobile ? "20px" : "40px 60px",
+        height: isMobile ? "80px" : "120px",
         backgroundColor: "rgba(5, 5, 5, 0.95)",
         backdropFilter: "blur(12px)",
         boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.4)",
@@ -746,174 +840,330 @@ export default function Home() {
         {/* Left Side - Logo and Platform Name */}
         <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '12px' }}>
           <OwlLogo />
-          <div style={{
-            fontSize: "2rem",
-            background: "linear-gradient(135deg, #7C3AED, #A78BFA)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            fontWeight: "800",
-          }}>
-            Owl: Open World Learning
-          </div>
+          {!isMobile && (
+            <div style={{
+              fontSize: "2rem",
+              background: "linear-gradient(135deg, #7C3AED, #A78BFA)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              fontWeight: "800",
+            }}>
+              Owl: Open World Learning
+            </div>
+          )}
         </Link>
 
-        {/* Middle - Navigation Links */}
-        <div style={{
-          display: "flex",
-          gap: "40px",
-          alignItems: "center",
-        }}>
-          {[
-            { label: "Home", path: "/home" },
-            { label: "Library", path: "/library" },
-            { label: "Courses", path: "/courses" },
-            { label: "About", path: "/about" }
-          ].map((item, index) => (
-            <Link 
-              key={index}
-              href={item.path}
-              style={{
-                color: "#E0E0E0",
-                textDecoration: "none",
-                fontSize: "1.1rem",
-                fontWeight: "500",
-                position: "relative",
-                padding: "5px 0",
-              }}
-            >
+        {/* Mobile Menu Button */}
+        {isMobile && !isMobileMenuOpen && (
+          <HamburgerIcon 
+            isOpen={isMobileMenuOpen} 
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          />
+        )}
+
+        {/* Desktop Navigation */}
+        {!isMobile && (
+          <>
+            {/* Middle - Navigation Links */}
+            <div style={{
+              display: "flex",
+              gap: "40px",
+              alignItems: "center",
+            }}>
+              {[
+                { label: "Home", path: "/home" },
+                { label: "Library", path: "/library" },
+                { label: "Courses", path: "/courses" },
+                { label: "About", path: "/about" }
+              ].map((item, index) => (
+                <Link 
+                  key={index}
+                  href={item.path}
+                  style={{
+                    color: "#E0E0E0",
+                    textDecoration: "none",
+                    fontSize: "1.1rem",
+                    fontWeight: "500",
+                    position: "relative",
+                    padding: "5px 0",
+                  }}
+                >
+                  <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    style={{
+                      position: "relative",
+                    }}
+                  >
+                    {item.label}
+                  </motion.div>
+                </Link>
+              ))}
+            </div>
+
+            {/* Right Side - Profile and Actions */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+              {/* Profile Dropdown */}
               <motion.div
-                whileHover={{ scale: 1.05 }}
+                initial={false}
                 style={{
-                  position: "relative",
+                  position: 'relative',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  cursor: 'pointer',
                 }}
               >
-                {item.label}
-              </motion.div>
-            </Link>
-          ))}
-        </div>
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setIsProfileOpen(!isProfileOpen)}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    background: "rgba(124, 58, 237, 0.1)",
+                    padding: "8px 16px",
+                    borderRadius: "12px",
+                    border: "1px solid rgba(124, 58, 237, 0.3)",
+                  }}
+                >
+                  <div style={{
+                    width: "32px",
+                    height: "32px",
+                    borderRadius: "50%",
+                    background: "linear-gradient(135deg, #7C3AED, #A78BFA)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "#FFFFFF",
+                    fontSize: "1.2rem",
+                    fontWeight: "600",
+                  }}>
+                    {userName?.[0]?.toUpperCase() || "U"}
+                  </div>
+                  <span style={{ color: '#E0E0E0' }}>{userName}</span>
+                  <motion.span
+                    animate={{ rotate: isProfileOpen ? 180 : 0 }}
+                    style={{ color: '#E0E0E0', fontSize: '1.2rem' }}
+                  >
+                    ▼
+                  </motion.span>
+                </motion.div>
 
-        {/* Right Side - Profile and Actions */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-          {/* Profile Dropdown */}
-          <motion.div
-            initial={false}
-            style={{
-              position: 'relative',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              cursor: 'pointer',
-            }}
-          >
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setIsProfileOpen(!isProfileOpen)}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                background: "rgba(124, 58, 237, 0.1)",
-                padding: "8px 16px",
-                borderRadius: "12px",
-                border: "1px solid rgba(124, 58, 237, 0.3)",
-              }}
-            >
-              <div style={{
-                width: "32px",
-                height: "32px",
-                borderRadius: "50%",
-                background: "linear-gradient(135deg, #7C3AED, #A78BFA)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "#FFFFFF",
-                fontSize: "1.2rem",
-                fontWeight: "600",
-              }}>
-                {userName?.[0]?.toUpperCase() || "U"}
+                {/* Dropdown Menu */}
+                {isProfileOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 10 }}
+                    style={{
+                      position: 'absolute',
+                      top: '100%',
+                      right: 0,
+                      marginTop: '10px',
+                      background: "rgba(13, 12, 34, 0.95)",
+                      borderRadius: "12px",
+                      border: "1px solid rgba(124, 58, 237, 0.2)",
+                      backdropFilter: "blur(12px)",
+                      overflow: 'hidden',
+                      minWidth: '200px',
+                      boxShadow: "0 10px 25px rgba(0, 0, 0, 0.3)",
+                    }}
+                  >
+                    <div
+                      style={{
+                        padding: '12px 16px',
+                        color: '#E0E0E0',
+                        borderBottom: '1px solid rgba(124, 58, 237, 0.3)',
+                        fontSize: '0.95rem',
+                      }}
+                    >
+                      {userName || 'User'}
+                    </div>
+                    <div
+                      style={{
+                        padding: '12px 16px',
+                        color: '#E0E0E0',
+                        cursor: 'pointer',
+                        transition: 'color 0.3s ease',
+                        fontSize: '0.95rem',
+                      }}
+                      onClick={() => router.push("/profile")}
+                      onMouseEnter={(e) => e.currentTarget.style.color = '#FFFFFF'}
+                      onMouseLeave={(e) => e.currentTarget.style.color = '#E0E0E0'}
+                    >
+                      My Profile
+                    </div>
+                    <div
+                      style={{
+                        padding: '12px 16px',
+                        color: '#E0E0E0',
+                        cursor: 'pointer',
+                        transition: 'color 0.3s ease',
+                        fontSize: '0.95rem',
+                        borderTop: '1px solid rgba(124, 58, 237, 0.1)',
+                      }}
+                      onClick={() => {
+                        localStorage.removeItem("walletAddress");
+                        localStorage.removeItem("userName");
+                        router.push("/auth");
+                      }}
+                      onMouseEnter={(e) => e.currentTarget.style.color = '#FFFFFF'}
+                      onMouseLeave={(e) => e.currentTarget.style.color = '#E0E0E0'}
+                    >
+                      Logout
+                    </div>
+                  </motion.div>
+                )}
+              </motion.div>
+
+              <div style={{ marginLeft: '20px' }}>
+                <GoogleTranslate />
               </div>
-              <span style={{ color: '#E0E0E0' }}>{userName}</span>
-              <motion.span
-                animate={{ rotate: isProfileOpen ? 180 : 0 }}
-                style={{ color: '#E0E0E0', fontSize: '1.2rem' }}
-              >
-                ▼
-              </motion.span>
-            </motion.div>
+            </div>
+          </>
+        )}
 
-            {/* Dropdown Menu */}
-            {isProfileOpen && (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 10 }}
-                style={{
-                  position: 'absolute',
-                  top: '100%',
-                  right: 0,
-                  marginTop: '10px',
-                  background: "rgba(13, 12, 34, 0.95)",
+        {/* Mobile Menu Overlay */}
+        <AnimatePresence>
+          {isMobile && isMobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, x: '100%' }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: '100%' }}
+              transition={{ type: 'tween', duration: 0.3 }}
+              style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: "rgba(5, 5, 5, 0.98)",
+                backdropFilter: "blur(12px)",
+                zIndex: 1000,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100vh',
+                width: '100vw',
+                overflowY: 'auto',
+              }}
+            >
+              {/* Close button */}
+              <div style={{
+                position: 'absolute',
+                top: '20px',
+                right: '20px',
+                zIndex: 1002,
+              }}>
+                <HamburgerIcon 
+                  isOpen={isMobileMenuOpen} 
+                  onClick={() => setIsMobileMenuOpen(false)}
+                />
+              </div>
+
+              <div style={{
+                width: '100%',
+                maxWidth: '400px',
+                padding: '0 30px',
+              }}>
+                {/* Mobile Navigation Links */}
+                <div style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "25px",
+                  marginBottom: "40px",
+                  width: '100%',
+                }}>
+                  {[
+                    { label: "Home", path: "/home" },
+                    { label: "Library", path: "/library" },
+                    { label: "Courses", path: "/courses" },
+                    { label: "About", path: "/about" },
+                    { label: "Profile", path: "/profile" }
+                  ].map((item, index) => (
+                    <Link 
+                      key={index}
+                      href={item.path}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      style={{
+                        color: "#E0E0E0",
+                        textDecoration: "none",
+                        fontSize: "2rem",
+                        fontWeight: "600",
+                        padding: "10px 0",
+                        textAlign: "center",
+                        borderBottom: "1px solid rgba(124, 58, 237, 0.1)",
+                      }}
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                </div>
+
+                {/* Mobile Profile Section */}
+                <div style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '20px',
+                  padding: '20px',
+                  background: "rgba(124, 58, 237, 0.1)",
                   borderRadius: "12px",
-                  border: "1px solid rgba(124, 58, 237, 0.2)",
-                  backdropFilter: "blur(12px)",
-                  overflow: 'hidden',
-                  minWidth: '200px',
-                  boxShadow: "0 10px 25px rgba(0, 0, 0, 0.3)",
-                }}
-              >
-                <div
-                  style={{
-                    padding: '12px 16px',
-                    color: '#E0E0E0',
-                    borderBottom: '1px solid rgba(124, 58, 237, 0.3)',
-                    fontSize: '0.95rem',
-                  }}
-                >
-                  {userName || 'User'}
+                  border: "1px solid rgba(124, 58, 237, 0.3)",
+                  marginBottom: '30px',
+                }}>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '12px',
+                  }}>
+                    <div style={{
+                      width: "40px",
+                      height: "40px",
+                      borderRadius: "50%",
+                      background: "linear-gradient(135deg, #7C3AED, #A78BFA)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      color: "#FFFFFF",
+                      fontSize: "1.4rem",
+                      fontWeight: "600",
+                    }}>
+                      {userName?.[0]?.toUpperCase() || "U"}
+                    </div>
+                    <span style={{ color: '#E0E0E0', fontSize: '1.2rem' }}>{userName}</span>
+                  </div>
+                  
+                  <button
+                    onClick={() => {
+                      localStorage.removeItem("walletAddress");
+                      localStorage.removeItem("userName");
+                      router.push("/auth");
+                    }}
+                    style={{
+                      background: "rgba(124, 58, 237, 0.2)",
+                      border: "1px solid rgba(124, 58, 237, 0.3)",
+                      color: "#E0E0E0",
+                      padding: "12px",
+                      borderRadius: "8px",
+                      fontSize: "1rem",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Logout
+                  </button>
                 </div>
-                <div
-                  style={{
-                    padding: '12px 16px',
-                    color: '#E0E0E0',
-                    cursor: 'pointer',
-                    transition: 'color 0.3s ease',
-                    fontSize: '0.95rem',
-                  }}
-                  onClick={() => router.push("/profile")}
-                  onMouseEnter={(e) => e.currentTarget.style.color = '#FFFFFF'}
-                  onMouseLeave={(e) => e.currentTarget.style.color = '#E0E0E0'}
-                >
-                  My Profile
-                </div>
-                <div
-                  style={{
-                    padding: '12px 16px',
-                    color: '#E0E0E0',
-                    cursor: 'pointer',
-                    transition: 'color 0.3s ease',
-                    fontSize: '0.95rem',
-                    borderTop: '1px solid rgba(124, 58, 237, 0.1)',
-                  }}
-                  onClick={() => {
-                    localStorage.removeItem("walletAddress");
-                    localStorage.removeItem("userName");
-                    router.push("/auth");
-                  }}
-                  onMouseEnter={(e) => e.currentTarget.style.color = '#FFFFFF'}
-                  onMouseLeave={(e) => e.currentTarget.style.color = '#E0E0E0'}
-                >
-                  Logout
-                </div>
-              </motion.div>
-            )}
-          </motion.div>
 
-          <div style={{ marginLeft: '20px' }}>
-            <GoogleTranslate />
-          </div>
-        </div>
+                {/* Mobile Google Translate */}
+                <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+                  <GoogleTranslate />
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
 
       {/* Hero Section */}
@@ -1102,7 +1352,7 @@ export default function Home() {
                     <span style={{ opacity: 0.7 }}>🕒</span>
                     {course.duration}
                   </div>
-                  <div style={{
+                  {/* <div style={{
                     background: "linear-gradient(135deg, #7C3AED, #BB86FC)",
                     padding: "8px 16px",
                     borderRadius: "12px",
@@ -1111,7 +1361,7 @@ export default function Home() {
                     fontWeight: "500",
                   }}>
                     {course.level}
-                  </div>
+                  </div> */}
                 </div>
               </motion.div>
             ))}

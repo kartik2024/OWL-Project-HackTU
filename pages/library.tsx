@@ -5,6 +5,8 @@ import { motion, LazyMotion, domAnimation, m } from "framer-motion";
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import { memo } from 'react';
+import { useMediaQuery } from 'react-responsive';
+import { AnimatePresence } from 'framer-motion';
 
 const OwlLogo = memo(() => (
   <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: "15px" }}>
@@ -243,6 +245,56 @@ const BookCard = memo(({ book, unlockedBooks, onBuy, bookPrice }: any) => (
 ));
 BookCard.displayName="BookCard";
 
+const HamburgerIcon = ({ isOpen, onClick }: { isOpen: boolean; onClick: () => void }) => (
+  <motion.button
+    onClick={onClick}
+    style={{
+      background: 'none',
+      border: 'none',
+      cursor: 'pointer',
+      padding: '10px',
+      zIndex: 1001,
+      position: 'relative',
+    }}
+  >
+    <motion.div
+      style={{
+        width: '24px',
+        height: '3px',
+        background: isOpen ? 'transparent' : '#E0E0E0',
+        position: 'relative',
+        transformOrigin: 'center',
+        transition: 'background 0.2s ease',
+      }}
+    >
+      <motion.div
+        style={{
+          width: '24px',
+          height: '3px',
+          background: '#E0E0E0',
+          position: 'absolute',
+          top: '-8px',
+          transformOrigin: 'center',
+        }}
+        animate={isOpen ? { rotate: 45, y: 8 } : { rotate: 0, y: 0 }}
+        transition={{ duration: 0.2 }}
+      />
+      <motion.div
+        style={{
+          width: '24px',
+          height: '3px',
+          background: '#E0E0E0',
+          position: 'absolute',
+          bottom: '-8px',
+          transformOrigin: 'center',
+        }}
+        animate={isOpen ? { rotate: -45, y: -8 } : { rotate: 0, y: 0 }}
+        transition={{ duration: 0.2 }}
+      />
+    </motion.div>
+  </motion.button>
+);
+
 export default function Library() {
   const router = useRouter();
   const [status, setStatus] = useState<string>("Waiting for MetaMask...");
@@ -254,6 +306,8 @@ export default function Library() {
   const [showNotification, setShowNotification] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState("");
   const [isClient, setIsClient] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const isMobile = useMediaQuery({ maxWidth: 768 });
 
   useEffect(() => {
     setIsClient(true);
@@ -444,20 +498,6 @@ export default function Library() {
     fontFamily: "'Inter', sans-serif",
   };
 
-  const navbarStyle: React.CSSProperties = {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: "40px 60px",
-    height: "120px",
-    backgroundColor: "rgba(5, 5, 5, 0.95)",
-    backdropFilter: "blur(12px)",
-    boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.4)",
-    position: "sticky",
-    top: 0,
-    zIndex: 1000,
-  };
-
   const logoContainerStyle: React.CSSProperties = {
     display: "flex",
     alignItems: "center",
@@ -499,88 +539,256 @@ export default function Library() {
     <LazyMotion features={domAnimation}>
       <div style={pageStyle}>
         {/* Navbar */}
-        <nav style={navbarStyle}>
-          <div style={logoContainerStyle}>
-            <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <OwlLogo />
-              <div style={logoStyle}>Open World Learning</div>
-            </Link>
-          </div>
-          <div style={navLinksStyle}>
-            {[
-              { label: "Home", path: "/home" },
-              { label: "Library", path: "/library" },
-              { label: "Courses", path: "/courses" },
-              { label: "About", path: "/about" }
-            ].map((item, index) => (
-              <Link 
-                key={index}
-                href={item.path}
-                style={linkStyle}
-              >
+        <nav style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: isMobile ? "20px" : "40px 60px",
+          height: isMobile ? "80px" : "120px",
+          backgroundColor: "rgba(5, 5, 5, 0.95)",
+          backdropFilter: "blur(12px)",
+          boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.4)",
+          position: "sticky",
+          top: 0,
+          zIndex: 1000,
+        }}>
+          {/* Left Side - Logo and Platform Name */}
+          <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <OwlLogo />
+            {!isMobile && (
+              <div style={{
+                fontSize: "2rem",
+                background: "linear-gradient(135deg, #7C3AED, #A78BFA)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                fontWeight: "800",
+              }}>
+                Owl: Open World Learning
+              </div>
+            )}
+          </Link>
+
+          {/* Mobile Menu Button */}
+          {isMobile && !isMobileMenuOpen && (
+            <HamburgerIcon 
+              isOpen={isMobileMenuOpen} 
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            />
+          )}
+
+          {/* Desktop Navigation */}
+          {!isMobile && (
+            <div style={navLinksStyle}>
+              {[
+                { label: "Home", path: "/home" },
+                { label: "Library", path: "/library" },
+                { label: "Courses", path: "/courses" },
+                { label: "About", path: "/about" }
+              ].map((item, index) => (
+                <Link 
+                  key={index}
+                  href={item.path}
+                  style={linkStyle}
+                >
+                  <motion.div
+                    whileHover="hover"
+                    initial="initial"
+                    variants={{
+                      initial: { color: "#E0E0E0" },
+                      hover: { color: "#FFFFFF" }
+                    }}
+                  >
+                    {item.label}
+                  </motion.div>
+                </Link>
+              ))}
+              {/* MetaMask Button */}
+              {account ? (
                 <motion.div
-                  whileHover="hover"
-                  initial="initial"
-                  variants={{
-                    initial: { color: "#E0E0E0" },
-                    hover: { color: "#FFFFFF" }
+                  style={{
+                    background: "linear-gradient(145deg, rgba(19, 10, 42, 0.9), rgba(5, 5, 5, 0.9))",
+                    color: "#FFFFFF",
+                    padding: "12px 24px",
+                    border: "1px solid rgba(124, 58, 237, 0.3)",
+                    borderRadius: "12px",
+                    fontSize: "1rem",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
                   }}
                 >
-                  {item.label}
+                  <div style={{
+                    width: "8px",
+                    height: "8px",
+                    backgroundColor: "#4CAF50",
+                    borderRadius: "50%",
+                  }} />
+                  {formatAddress(account)}
                 </motion.div>
-              </Link>
-            ))}
-            {/* MetaMask Button */}
-            {account ? (
+              ) : (
+                <motion.button
+                  onClick={() => {
+                    if (typeof window !== "undefined" && window?.ethereum) {
+                      window.ethereum.request({
+                        method: 'eth_requestAccounts'
+                      });
+                    }
+                  }}
+                  style={{
+                    backgroundColor: "rgba(124, 58, 237, 0.1)",
+                    color: "#FFFFFF",
+                    padding: "12px 24px",
+                    border: "1px solid rgba(124, 58, 237, 0.3)",
+                    borderRadius: "12px",
+                    cursor: "pointer",
+                    fontSize: "1rem",
+                    opacity: 1,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                  }}
+                  whileHover={{ backgroundColor: "rgba(124, 58, 237, 0.2)" }}
+                >
+                  Connect Wallet
+                </motion.button>
+              )}
+            </div>
+          )}
+
+          {/* Mobile Menu Overlay */}
+          <AnimatePresence>
+            {isMobile && isMobileMenuOpen && (
               <motion.div
+                initial={{ opacity: 0, x: '100%' }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: '100%' }}
+                transition={{ type: 'tween', duration: 0.3 }}
                 style={{
-                  background: "linear-gradient(145deg, rgba(19, 10, 42, 0.9), rgba(5, 5, 5, 0.9))",
-                  color: "#FFFFFF",
-                  padding: "12px 24px",
-                  border: "1px solid rgba(124, 58, 237, 0.3)",
-                  borderRadius: "12px",
-                  fontSize: "1rem",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
+                  position: 'fixed',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  background: "rgba(5, 5, 5, 0.98)",
+                  backdropFilter: "blur(12px)",
+                  zIndex: 1000,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  height: '100vh',
+                  width: '100vw',
+                  overflowY: 'auto',
                 }}
               >
+                {/* Close button */}
                 <div style={{
-                  width: "8px",
-                  height: "8px",
-                  backgroundColor: "#4CAF50",
-                  borderRadius: "50%",
-                }} />
-                {formatAddress(account)}
+                  position: 'absolute',
+                  top: '20px',
+                  right: '20px',
+                  zIndex: 1002,
+                }}>
+                  <HamburgerIcon 
+                    isOpen={isMobileMenuOpen} 
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  />
+                </div>
+
+                <div style={{
+                  width: '100%',
+                  maxWidth: '400px',
+                  padding: '0 30px',
+                }}>
+                  {/* Mobile Navigation Links */}
+                  <div style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "25px",
+                    marginBottom: "40px",
+                    width: '100%',
+                  }}>
+                    {[
+                      { label: "Home", path: "/home" },
+                      { label: "Library", path: "/library" },
+                      { label: "Courses", path: "/courses" },
+                      { label: "About", path: "/about" },
+                      { label: "Profile", path: "/profile" }
+                    ].map((item, index) => (
+                      <Link 
+                        key={index}
+                        href={item.path}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        style={{
+                          color: "#E0E0E0",
+                          textDecoration: "none",
+                          fontSize: "2rem",
+                          fontWeight: "600",
+                          padding: "10px 0",
+                          textAlign: "center",
+                          borderBottom: "1px solid rgba(124, 58, 237, 0.1)",
+                        }}
+                      >
+                        {item.label}
+                      </Link>
+                    ))}
+                  </div>
+
+                  {/* Mobile Wallet Section */}
+                  <div style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '20px',
+                    padding: '20px',
+                    background: "rgba(124, 58, 237, 0.1)",
+                    borderRadius: "12px",
+                    border: "1px solid rgba(124, 58, 237, 0.3)",
+                    marginBottom: '30px',
+                  }}>
+                    {account ? (
+                      <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '12px',
+                      }}>
+                        <div style={{
+                          width: "8px",
+                          height: "8px",
+                          backgroundColor: "#4CAF50",
+                          borderRadius: "50%",
+                        }} />
+                        <span style={{ color: '#E0E0E0', fontSize: '1.2rem' }}>
+                          {formatAddress(account)}
+                        </span>
+                      </div>
+                    ) : (
+                      <button
+                        onClick={() => {
+                          if (typeof window !== "undefined" && window?.ethereum) {
+                            window.ethereum.request({
+                              method: 'eth_requestAccounts'
+                            });
+                          }
+                          setIsMobileMenuOpen(false);
+                        }}
+                        style={{
+                          background: "rgba(124, 58, 237, 0.2)",
+                          border: "1px solid rgba(124, 58, 237, 0.3)",
+                          color: "#E0E0E0",
+                          padding: "12px",
+                          borderRadius: "8px",
+                          fontSize: "1rem",
+                          cursor: "pointer",
+                        }}
+                      >
+                        Connect Wallet
+                      </button>
+                    )}
+                  </div>
+                </div>
               </motion.div>
-            ) : (
-              <motion.button
-                onClick={() => {
-                  if (typeof window !== "undefined" && window?.ethereum) {
-                    window.ethereum.request({
-                      method: 'eth_requestAccounts'
-                    });
-                  }
-                }}
-                style={{
-                  backgroundColor: "rgba(124, 58, 237, 0.1)",
-                  color: "#FFFFFF",
-                  padding: "12px 24px",
-                  border: "1px solid rgba(124, 58, 237, 0.3)",
-                  borderRadius: "12px",
-                  cursor: "pointer",
-                  fontSize: "1rem",
-                  opacity: 1,
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                }}
-                whileHover={{ backgroundColor: "rgba(124, 58, 237, 0.2)" }}
-              >
-                Connect Wallet
-              </motion.button>
             )}
-          </div>
+          </AnimatePresence>
         </nav>
 
         {/* Main Content */}
@@ -588,17 +796,20 @@ export default function Library() {
           {/* Header Section */}
           <div style={{
             display: "flex",
+            flexDirection: isMobile ? "column" : "row",
             justifyContent: "space-between",
-            alignItems: "center",
+            alignItems: isMobile ? "stretch" : "center",
             marginBottom: "60px",
+            gap: isMobile ? "30px" : "0",
           }}>
             <motion.h1 
               style={{ 
-                fontSize: "3.5rem",
+                fontSize: isMobile ? "2.8rem" : "3.5rem",
                 fontWeight: "800",
                 background: "linear-gradient(135deg, #FFFFFF, #BB86FC)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
+                textAlign: isMobile ? "center" : "left",
               }}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -610,11 +821,13 @@ export default function Library() {
             {/* Filter Section */}
             <div style={{
               display: "flex",
-              gap: "20px",
+              flexDirection: isMobile ? "column" : "row",
+              gap: isMobile ? "10px" : "20px",
               background: "rgba(19, 10, 42, 0.6)",
-              padding: "8px",
+              padding: isMobile ? "10px" : "8px",
               borderRadius: "12px",
               border: "1px solid rgba(124, 58, 237, 0.2)",
+              width: isMobile ? "100%" : "auto",
             }}>
               {[
                 { label: "All Books", value: 'all' },
@@ -626,12 +839,13 @@ export default function Library() {
                   key={option.value}
                   onClick={() => setFilter(option.value as 'all' | 'free' | 'paid' | 'audio')}
                   style={{
-                    padding: "12px 24px",
+                    padding: isMobile ? "16px" : "12px 24px",
                     borderRadius: "8px",
                     border: "none",
                     cursor: "pointer",
                     fontSize: "0.95rem",
                     fontWeight: "500",
+                    width: isMobile ? "100%" : "auto",
                     background: filter === option.value ? 
                       "linear-gradient(135deg, #7C3AED, #3B82F6)" : 
                       "transparent",
@@ -655,10 +869,13 @@ export default function Library() {
           <motion.div 
             style={{ 
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(400px, 1fr))",
-              gap: "40px",
+              gridTemplateColumns: isMobile ? 
+                "1fr" : 
+                "repeat(auto-fill, minmax(400px, 1fr))",
+              gap: isMobile ? "30px" : "40px",
               maxWidth: "1400px",
               margin: "0 auto",
+              padding: isMobile ? "0 20px" : "0",
             }}
             initial={false}
           >
