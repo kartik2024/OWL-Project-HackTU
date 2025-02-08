@@ -83,7 +83,7 @@ export default function UserPreferencesModal({ isOpen, onClose, onSubmit }: User
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
             }}>
-              What's your age group?
+              {"What's your age group?"}
             </h2>
             {["Less than 12", "12-18", "18-25", "More than 25"].map((age) => (
               <motion.div
@@ -113,7 +113,7 @@ export default function UserPreferencesModal({ isOpen, onClose, onSubmit }: User
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
             }}>
-              Do you have any disabilities?
+              {"Do you have any disabilities?"}
             </h2>
             {["Yes", "No"].map((option) => (
               <motion.div

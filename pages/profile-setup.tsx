@@ -1,15 +1,13 @@
 import { useState, useContext, ChangeEvent, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useRouter } from "next/router";
 import { ThemeContext } from "../context/ThemeContext";
 import dynamic from 'next/dynamic';
 import styles from '../styles/ProfileSetup.module.css';
 import Link from "next/link";
-
+import Spline from "@splinetool/react-spline";
 // Dynamically import Spline with no SSR
-const Spline = dynamic(() => import('@splinetool/react-spline'), {
-  ssr: false
-});
+// const Spline = dynamic(() => import('@splinetool/react-spline').then(mod => mod.default), { ssr: false });
 
 interface Profile {
   displayName: string;
@@ -51,21 +49,11 @@ const ProfileSetup = () => {
     }
   }, []);
 
-  useEffect(() => {
-    console.log('Theme context:', { theme, toggleTheme: !!toggleTheme });
-  }, [theme, toggleTheme]);
-
   const handleSelectAvatar = (avatarNumber: number) => {
     setProfile(prev => ({
       ...prev,
       profileImage: `/images/profile${avatarNumber}.png`
     }));
-  };
-
-  const handleThemeToggle = () => {
-    console.log('Toggle clicked, current theme:', theme);
-    toggleTheme();
-    console.log('Theme after toggle:', theme);
   };
 
   const handleComplete = async () => {
@@ -175,12 +163,8 @@ const ProfileSetup = () => {
     }
   };
 
-  // Add console.log to debug
-  console.log("Current theme:", theme);
-  console.log("Toggle theme function exists:", !!toggleTheme);
-
   return (
-    <div className={styles.container} data-theme={theme}>
+    <div className={styles.container}>
       <motion.nav 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -270,9 +254,9 @@ const ProfileSetup = () => {
           gap: "6px",
           padding: "4px",
         }}>
-          {/* Enhanced theme toggle button */}
+          {/* Theme toggle button */}
           <motion.button
-            onClick={handleThemeToggle}
+            onClick={toggleTheme}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             style={{
@@ -292,8 +276,6 @@ const ProfileSetup = () => {
               boxShadow: theme === 'dark'
                 ? "0 4px 20px rgba(124, 58, 237, 0.1)"
                 : "0 4px 20px rgba(124, 58, 237, 0.1)",
-              position: "relative",
-              overflow: "hidden",
             }}
           >
             <motion.div
@@ -307,74 +289,17 @@ const ProfileSetup = () => {
                 stiffness: 200,
                 damping: 15,
               }}
-              style={{
-                position: "relative",
-                width: "20px",
-                height: "20px",
-              }}
             >
-              <AnimatePresence mode="wait">
-                {theme === 'dark' ? (
-                  <motion.div
-                    key="sun"
-                    initial={{ scale: 0, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    exit={{ scale: 0, opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <motion.svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" strokeWidth="2">
-                      <circle cx="12" cy="12" r="4"/>
-                      {[...Array(8)].map((_, i) => (
-                        <motion.line
-                          key={i}
-                          x1="12"
-                          y1="1"
-                          x2="12"
-                          y2="3"
-                          transform={`rotate(${i * 45} 12 12)`}
-                          stroke="#7C3AED"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          initial={{ opacity: 0.3 }}
-                          animate={{
-                            opacity: [0.3, 0.8, 0.3],
-                          }}
-                          transition={{
-                            duration: 3,
-                            repeat: Infinity,
-                            delay: i * 0.1,
-                          }}
-                        />
-                      ))}
-                    </motion.svg>
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key="moon"
-                    initial={{ scale: 0, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    exit={{ scale: 0, opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <motion.svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                      <motion.path
-                        d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"
-                        stroke="#7C3AED"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        initial={{ pathLength: 0 }}
-                        animate={{ pathLength: 1 }}
-                        transition={{
-                          duration: 3,
-                          ease: "easeInOut",
-                          repeat: Infinity,
-                          repeatType: "reverse",
-                        }}
-                      />
-                    </motion.svg>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              {theme === 'dark' ? (
+                <motion.svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" strokeWidth="2">
+                  <circle cx="12" cy="12" r="4"/>
+                  <path d="M12 2v2m0 16v2M4 12H2m20 0h-2m-2.05-6.95l-1.41 1.41M5.46 5.46l-1.41 1.41m0 10.26l1.41 1.41m12.72 0l1.41-1.41"/>
+                </motion.svg>
+              ) : (
+                <motion.svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" strokeWidth="2">
+                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                </motion.svg>
+              )}
             </motion.div>
           </motion.button>
 

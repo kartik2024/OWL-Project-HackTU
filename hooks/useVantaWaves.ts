@@ -16,10 +16,18 @@ export const useVantaWaves = () => {
     const loadScripts = async () => {
       if (typeof window !== 'undefined') {
         if (!window.THREE) {
-          await import('https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js')
+          const script = document.createElement("script");
+      script.src = "https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js";
+      script.async = true;
+      document.body.appendChild(script);
+      await new Promise((resolve) => (script.onload = resolve));
         }
         if (!window.VANTA) {
-          await import('https://cdn.jsdelivr.net/gh/tengbao/vanta/dist/vanta.waves.min.js')
+          const script = document.createElement("script");
+      script.src = "https://cdn.jsdelivr.net/gh/tengbao/vanta/dist/vanta.waves.min.js";
+      script.async = true;
+      document.body.appendChild(script);
+      await new Promise((resolve) => (script.onload = resolve));
         }
 
         if (!vantaEffect && vantaRef.current) {

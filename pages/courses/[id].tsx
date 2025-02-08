@@ -34,7 +34,8 @@ export default function CoursePage() {
     if (typeof window !== 'undefined' && id) {
       try {
         const completedCourses = JSON.parse(localStorage.getItem('completedCourses') || '{}');
-        setIsCompleted(!!completedCourses[id]);
+        // setIsCompleted(!!completedCourses[id]);
+        console.log(completedCourses);
       } catch (error) {
         console.error('Error checking course completion:', error);
         setIsCompleted(false);
@@ -132,9 +133,11 @@ export default function CoursePage() {
       
       if (checked) {
         // Mark course as completed
+        if(typeof id == 'string')
         completedCourses[id] = true;
       } else {
         // Remove course from completed list
+        if(typeof id == 'string')
         delete completedCourses[id];
       }
 

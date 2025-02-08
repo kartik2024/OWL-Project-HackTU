@@ -1,4 +1,5 @@
-interface Course {
+
+export interface Course {
   id: string;
   title: string;
   description: string;
@@ -12,8 +13,11 @@ interface Course {
   category: string;
   icon: string;
   topics: string[];
+  certificateTemplate:string;
+  signLanguage:string;
+  subtitles:boolean;
+  specialFeatures: string[];
 }
-
 export const courses: Course[] = [
   {
     id: "python-ai",
@@ -28,6 +32,10 @@ export const courses: Course[] = [
     instructor: "Dr. James Wilson",
     category: "regular",
     icon: "PythonIcon",
+    certificateTemplate: "",
+    subtitles: false,
+    specialFeatures: [],
+    signLanguage: "",
     topics: ["AI", "Machine Learning", "Technology", "Programming"]
   },
   {
@@ -39,9 +47,13 @@ export const courses: Course[] = [
     ipfsLink: "ipfs://bafybeihik7ybnqm4kmn3xvejrn3pux4by6sqokot5iuxcbyxxzvcj3w7wu",
     videoCID: "bafybeihik7ybnqm4kmn3xvejrn3pux4by6sqokot5iuxcbyxxzvcj3w7wu",
     isPaid: false,
+    specialFeatures: [],
+    subtitles: false,
     duration: "5 hours",
     instructor: "Dr. Emma Green",
     category: "regular",
+    certificateTemplate: "",
+    signLanguage: "",
     icon: "EnvironmentIcon",
     topics: ["Environmental Science", "Conservation", "Sustainability"]
   },
@@ -54,6 +66,9 @@ export const courses: Course[] = [
     ipfsLink: "ipfs://bafybeih7gaeiriwekuz3r6faobza25mcstubuh4qynintyj72pakrtazzu",
     videoCID: "bafybeih7gaeiriwekuz3r6faobza25mcstubuh4qynintyj72pakrtazzu",
     isPaid: true,
+    specialFeatures: [],
+    subtitles: false,
+    signLanguage: "",
     duration: "8 hours",
     instructor: "Dr. Alan Zhang",
     certificateTemplate: "https://example.com/ai-certificate-template.png",
@@ -70,6 +85,10 @@ export const courses: Course[] = [
     ipfsLink: "ipfs://bafybeiff6vjow24sm4hyam34pdz5iy73cgms67ano7nt7gnkkgv54rlnkm",
     videoCID: "bafybeiff6vjow24sm4hyam34pdz5iy73cgms67ano7nt7gnkkgv54rlnkm",
     isPaid: true,
+    subtitles: false,
+    specialFeatures: [],
+    
+    signLanguage: "",
     duration: "10 hours",
     instructor: "Prof. Maria Rodriguez",
     certificateTemplate: "https://example.com/history-certificate-template.png",
@@ -90,6 +109,7 @@ export const courses: Course[] = [
     instructor: "Emma Chen",
     category: "deaf",
     signLanguage: "ASL",
+    certificateTemplate: "",
     subtitles: true,
     specialFeatures: ["Visual Demonstrations", "Interactive Exercises", "Closed Captions"],
     icon: "AccessibilityIcon",
@@ -104,6 +124,7 @@ export const courses: Course[] = [
     ipfsLink: "ipfs://bafybeibjznhftx74luzcdd36zr5p4ampdezsfaxgwedm4gsqvuhsk7qzee",
     videoCID: "bafybeibjznhftx74luzcdd36zr5p4ampdezsfaxgwedm4gsqvuhsk7qzee",
     isPaid: false,
+    certificateTemplate: "",
     duration: "12 hours",
     instructor: "Michael Thompson",
     category: "deaf",
