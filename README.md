@@ -1,6 +1,6 @@
 # 🦉 Owl
 
-Owl is a simple and efficient application designed to [brief description of what Owl does]. It aims to [mention the primary goal or problem it solves].
+Owl is a simple and efficient application designed to provide accesible and inclusive Education. It aims to dvelop a platform where anyone can Learn Without Limits.
 
 ##  🚀 Features
 - 🛠️ Easy to use and lightweight
