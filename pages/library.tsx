@@ -578,11 +578,17 @@ export default function Library() {
 
           {/* Desktop Navigation */}
           {!isMobile && (
-            <div style={navLinksStyle}>
+            <div style={{
+              display: "flex",
+              gap: "40px",
+              alignItems: "center",
+            }}>
               {[
                 { label: "Home", path: "/home" },
                 { label: "Library", path: "/library" },
                 { label: "Courses", path: "/courses" },
+                { label: "Roadmap", path: "/roadmap" },
+                { label: "Jobs", path: "/jobs" },
                 { label: "About", path: "/about" }
               ].map((item, index) => (
                 <Link 
@@ -711,6 +717,8 @@ export default function Library() {
                       { label: "Home", path: "/home" },
                       { label: "Library", path: "/library" },
                       { label: "Courses", path: "/courses" },
+                      { label: "Roadmap", path: "/roadmap" },
+                      { label: "Jobs", path: "/jobs" },
                       { label: "About", path: "/about" },
                       { label: "Profile", path: "/profile" }
                     ].map((item, index) => (

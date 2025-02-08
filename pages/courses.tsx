@@ -421,7 +421,9 @@ export default function Courses() {
                 { label: "Home", path: "/home" },
                 { label: "Library", path: "/library" },
                 { label: "Courses", path: "/courses" },
-                { label: "About", path: "/jobs" }
+                { label: "Roadmap", path: "/roadmap" },
+                { label: "Jobs", path: "/jobs" },
+                { label: "About", path: "/about" }
               ].map((item, index) => (
                 <Link 
                   key={index}
@@ -549,6 +551,8 @@ export default function Courses() {
                       { label: "Home", path: "/home" },
                       { label: "Library", path: "/library" },
                       { label: "Courses", path: "/courses" },
+                      { label: "Roadmap", path: "/roadmap" },
+                      { label: "Jobs", path: "/jobs" },
                       { label: "About", path: "/about" },
                       { label: "Profile", path: "/profile" }
                     ].map((item, index) => (
