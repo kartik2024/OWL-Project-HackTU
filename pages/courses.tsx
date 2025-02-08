@@ -421,7 +421,7 @@ export default function Courses() {
                 { label: "Home", path: "/home" },
                 { label: "Library", path: "/library" },
                 { label: "Courses", path: "/courses" },
-                { label: "About", path: "/about" }
+                { label: "About", path: "/jobs" }
               ].map((item, index) => (
                 <Link 
                   key={index}
