@@ -874,6 +874,7 @@ export default function Home() {
                 { label: "Home", path: "/home" },
                 { label: "Library", path: "/library" },
                 { label: "Courses", path: "/courses" },
+                { label: "Roadmap", path: "/roadmap" },
                 { label: "About", path: "/about" }
               ].map((item, index) => (
                 <Link 
@@ -1080,6 +1081,7 @@ export default function Home() {
                     { label: "Home", path: "/home" },
                     { label: "Library", path: "/library" },
                     { label: "Courses", path: "/courses" },
+                    { label: "Roadmap", path: "/roadmap" },
                     { label: "About", path: "/about" },
                     { label: "Profile", path: "/profile" }
                   ].map((item, index) => (
