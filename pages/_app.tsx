@@ -34,6 +34,28 @@ class VoiceNavigation {
       'go to library': '/library',
       'take me to profile': '/profile',
       'go to profile': '/profile',
+      'open first book': '/read/1',
+      'open second book': '/read/2',
+      'open third book': '/read/3',
+      'open fourth book': '/read/4',
+      'open fifth book': '/read/5',
+      'read first book': '/read/1',
+      'read second book': '/read/2',
+      'read third book': '/read/3',
+      'read fourth book': '/read/4',
+      'read fifth book': '/read/5',
+      'show me first book': '/read/1',
+      'show me second book': '/read/2',
+      'show me third book': '/read/3',
+      'show me fourth book': '/read/4',
+      'show me fifth book': '/read/5',
+      'open roadmap': '/roadmap',
+      'go to roadmap': '/roadmap',
+      'open jobs': '/jobs',
+      'go to jobs': '/jobs',
+      'open about': '/about',
+      
+
     };
   }
 

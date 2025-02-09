@@ -52,7 +52,7 @@ const books: Book[] = [
     description: "Learn the fundamentals of Web3 technology and artificial intelligence in this comprehensive guide.",
     isPaid: false,
     price: "0",
-    pdfUrl: "https://bafkreictq2jdk2z2v3ytcmhhe5bw6pvjbtafaxdim3qban4wwgvbw3q3vm.ipfs.flk-ipfs.xyz",
+    pdfUrl: "https://bafkreig2bq3xytioly7hxavyeaadys3ofzduk54ys5nyjehp5o4t3xyjfa.ipfs.flk-ipfs.xyz",
     isAudio: false
   },
   {
@@ -63,7 +63,7 @@ const books: Book[] = [
     description: "A guide to personal development and achieving your goals through self-motivation.",
     isPaid: false,
     price: "0",
-    pdfUrl: "https://bafkreifcwxjcjo2t6vm3t5oh2pysheolwn65qip7hhbi4dl4jqhuezlbru.ipfs.flk-ipfs.xyz",
+    pdfUrl: "https://bafkreig2bq3xytioly7hxavyeaadys3ofzduk54ys5nyjehp5o4t3xyjfa.ipfs.flk-ipfs.xyz",
     isAudio: false
   },
   {
