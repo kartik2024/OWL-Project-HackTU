@@ -466,6 +466,7 @@ export default function About() {
               { label: "Home", path: "/home" },
               { label: "Library", path: "/library" },
               { label: "Courses", path: "/courses" },
+              { label: "Learn Sign Language", path: "http://localhost:8501" },
               { label: "Roadmap", path: "/roadmap" },
               { label: "Jobs", path: "/jobs" },
               { label: "About", path: "/about" }
@@ -473,6 +474,8 @@ export default function About() {
               <Link 
                 key={index}
                 href={item.path}
+                target={item.path.startsWith('http') ? '_blank' : undefined}
+                rel={item.path.startsWith('http') ? 'noopener noreferrer' : undefined}
                 style={linkStyle}
               >
                 <motion.div
@@ -600,6 +603,7 @@ export default function About() {
                     { label: "Home", path: "/home" },
                     { label: "Library", path: "/library" },
                     { label: "Courses", path: "/courses" },
+                    { label: "Learn Sign Language", path: "http://localhost:8501" },
                     { label: "Roadmap", path: "/roadmap" },
                     { label: "Jobs", path: "/jobs" },
                     { label: "About", path: "/about" },
@@ -608,6 +612,8 @@ export default function About() {
                     <Link 
                       key={index}
                       href={item.path}
+                      target={item.path.startsWith('http') ? '_blank' : undefined}
+                      rel={item.path.startsWith('http') ? 'noopener noreferrer' : undefined}
                       onClick={() => setIsMobileMenuOpen(false)}
                       style={{
                         color: "#E0E0E0",
